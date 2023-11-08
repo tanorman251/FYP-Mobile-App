@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RegisterActivity"
+    android:background="@color/tan"
+    android:layout_margin="10dp"
+    android:padding="10dp">
+
+    <RelativeLayout android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        tools:ignore="ExtraText">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/regTxt"
+        android:layout_marginTop="10dp"
+        android:text="Please enter your details below"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textColor="@color/black"
+        tools:ignore="HardcodedText"></TextView>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fullname"
+        android:layout_below="@+id/regTxt"
+        android:text="Name: "
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        tools:ignore="HardcodedText"></TextView>
+
+    <EditText
+        android:id="@+id/fullnameET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fullname"
+        android:height="48sp"
+        android:hint="Enter your name here"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        tools:ignore="Autofill,HardcodedText">
+
+    </EditText>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/email"
+        android:layout_below="@+id/fullnameET"
+        android:text="Email: "
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        tools:ignore="HardcodedText"></TextView>
+
+    <EditText
+        android:id="@+id/emailET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/email"
+        android:height="48sp"
+        android:hint="Enter your Email here"
+        android:inputType="textEmailAddress"
+        android:minHeight="48dp"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:autofillHints=""
+        tools:ignore="HardcodedText">
+
+    </EditText>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/pword"
+        android:layout_below="@+id/emailET"
+        android:text="Password: "
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        tools:ignore="HardcodedText"></TextView>
+
+    <EditText
+        android:id="@+id/pwordET"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pword"
+        android:height="48sp"
+        android:hint="Choose a password"
+        android:inputType="textPassword"
+        android:minHeight="48dp"
+        android:padding="5dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:autofillHints=""
+        tools:ignore="HardcodedText">
+
+    </EditText>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/joinOrC"
+        android:layout_below="@+id/pwordET"
+        android:text="Tick the box below if you need to create a Group "
+        android:textSize="20sp"
+        android:layout_marginTop="20sp"
+        android:textColor="@color/black"
+        android:padding="5dp"
+        tools:ignore="HardcodedText"></TextView>
+
+
+<RadioGroup
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_below="@+id/joinOrC"
+    android:id="@+id/jorc">
+<RadioButton
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/createrbtn"
+    android:textColor="@color/black"
+    android:text="Create Group"
+    tools:ignore="HardcodedText"></RadioButton>
+
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/joinrbtn"
+        android:textColor="@color/black"
+        android:text="Join Group"></RadioButton>
+</RadioGroup>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/registerBtn"
+            android:text="Sign UP"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/dpink"
+            android:outlineAmbientShadowColor="@color/black"
+            android:layout_below="@+id/jorc"
+            android:height="75sp"
+            android:layout_marginTop="20dp"></Button>
+
+
+</RelativeLayout>
+</ScrollView>
