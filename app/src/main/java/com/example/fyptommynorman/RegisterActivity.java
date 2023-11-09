@@ -20,6 +20,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 
 import java.util.Random;
 
@@ -57,7 +60,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String fullName = etname.getText().toString();
                 String userEmail = etemail.getText().toString();
                 String userPword = etpword.getText().toString();
-                final String[] groupPin = {""};
+                final String[] groupPin = new String[1];
 
                 if (TextUtils.isEmpty(fullName)) {
                     Toast.makeText(RegisterActivity.this, "Please enter your Name", Toast.LENGTH_SHORT).show();
@@ -94,11 +97,12 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             groupPin[0] = userInput.getText().toString();
                             Toast.makeText(RegisterActivity.this, groupPin[0], Toast.LENGTH_SHORT).show();
+                            registerUser(fullName, userEmail, userPword, groupPin[0]);
+
                         }
                     });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-                    registerUser(fullName, userEmail, userPword, groupPin);
 
 
 
@@ -109,7 +113,8 @@ public class RegisterActivity extends AppCompatActivity {
                     int pin = 100000 + random.nextInt(900000);
                     String randomPin = String.valueOf(pin);
                     Toast.makeText(RegisterActivity.this, "Your new Pin for your group is" + randomPin + " remeber to share it with your group :)", Toast.LENGTH_LONG).show();
-                    registerUser(fullName, userEmail, userPword, groupPin);
+                    groupPin[0] = randomPin.toString();
+                    registerUser(fullName, userEmail, userPword, groupPin[0]);
 
                 }
             }
@@ -119,19 +124,38 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
-    private void registerUser(String fullName, String userEmail, String userPword, String[] groupPin) {
+    private void registerUser(String fullName, String userEmail, String userPword, String groupPin) {
 
         //add to firebase
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(userEmail, userPword).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "User Succsesfully Registeerd", Toast.LENGTH_LONG).show();
                     FirebaseUser firebaseuser = auth.getCurrentUser();
 
+
+                    //add info to database about user
+
+                    readWriteData writeUserDetails = new readWriteData(fullName, groupPin);
+                    DatabaseReference userProfile = FirebaseDatabase.getInstance().getReference("User");
+                    userProfile.child(firebaseuser.getUid()).setValue(writeUserDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                            if (task.isCanceled()) {
+                                Toast.makeText(RegisterActivity.this, "Error adding deatils", Toast.LENGTH_LONG).show();
+                                FirebaseUser firebaseuser = auth.getCurrentUser();
+
+                            }
+
+
+                        }
+                    });
                 }
             }
+
+            ;
         });
-    }
-}
+    };}
