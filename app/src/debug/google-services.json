@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "568690964197",
+    "firebase_url": "https://fyptommynorman-default-rtdb.firebaseio.com",
+    "project_id": "fyptommynorman",
+    "storage_bucket": "fyptommynorman.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568690964197:android:fe172109e92ea944d0460c",
+        "android_client_info": {
+          "package_name": "com.example.fyptommynorman"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZt6RhiH_zENay131WUSo3wms0xdI78Xs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
