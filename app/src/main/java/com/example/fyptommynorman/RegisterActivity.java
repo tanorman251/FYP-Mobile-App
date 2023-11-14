@@ -132,7 +132,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(RegisterActivity.this, "User Succsesfully Registeerd", Toast.LENGTH_LONG).show();
+                    Toast.makeText(RegisterActivity.this, "User Successfully Registered", Toast.LENGTH_LONG).show();
                     FirebaseUser firebaseuser = auth.getCurrentUser();
 
 
@@ -145,7 +145,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
 
                             if (task.isCanceled()) {
-                                Toast.makeText(RegisterActivity.this, "Error adding deatils", Toast.LENGTH_LONG).show();
+                                Toast.makeText(RegisterActivity.this, "Error adding details", Toast.LENGTH_LONG).show();
                                 FirebaseUser firebaseuser = auth.getCurrentUser();
 
                             }
@@ -156,6 +156,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
 
-            ;
+
         });
-    };}
+    }}

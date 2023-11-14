@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/messageIc"
+        android:title="Message"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_message_24"/>
+    <item
+        android:id="@+id/moneyIc"
+        android:title="moneyIc"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_currency_pound_24"/>
+
+    <item
+        android:id="@+id/homeIc"
+        android:title="Home"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_home_24"/>
+
+    <item
+        android:id="@+id/adviceIc"
+        android:title="Advice"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_tips_and_updates_24"/>
+
+    <item
+        android:id="@+id/calenderIc"
+        android:title="Calender"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/baseline_calendar_month_24"/>
+
+</menu>
