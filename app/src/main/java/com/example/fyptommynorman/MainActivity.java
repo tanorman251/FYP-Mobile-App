@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-
+//this Activity works as a splash screen where the user can choose to either login or sign up
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        // TODO create a name for this app and add in a image and a progress bar across the whole project
         regBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

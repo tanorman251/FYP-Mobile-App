@@ -47,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 }
             });
         }
-
+  //TODO add more error handeling such as see if the email fits the tight pattern i.e @ and check if everything is empty
     private void loginUser(String email, String pword) {
         firebaseAuth.signInWithEmailAndPassword(email, pword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override

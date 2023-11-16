@@ -2,11 +2,31 @@ package com.example.fyptommynorman;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import java.util.WeakHashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +43,19 @@ public class CalanderFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+    private CalendarView calanderView;
+    private EditText editText;
+
+    private String dateSelector;
+
+    private TextView eventText;
+
+    private Spinner eventSpinner;
+    private DatabaseReference databaseReference;
+
+    private List<String> eventList;
 
     public CalanderFragment() {
         // Required empty public constructor
@@ -58,7 +91,122 @@ public class CalanderFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calander, container, false);
+        View view = inflater.inflate(R.layout.fragment_calander, container, false);
+
+        calanderView = view.findViewById(R.id.calendarView);
+        editText = view.findViewById(R.id.etEvent);
+
+        eventSpinner = view.findViewById(R.id.eventSpinner);
+
+        Button button = view.findViewById(R.id.addButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                buttonAddEvent(view);
+            }
+        });
+
+
+
+        calanderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+                dateSelector = Integer.toString(i) + Integer.toString(i1+1) + Integer.toString(i2);
+                calanderCLicked();
+
+            }
+        });
+
+
+
+        databaseReference = FirebaseDatabase.getInstance().getReference("Calendar");
+        eventList = new ArrayList<>();
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    eventList.add(dataSnapshot.getKey());
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, eventList);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                eventSpinner.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+                String eventSelected = eventList.get(position);
+                eventSpinnerItem(eventSelected);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        
+        
+        return view;
+
+
+    }
+
+    private void eventSpinnerItem(String eventSelected) {
+        
+        databaseReference.child(eventSelected).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String message = snapshot.getValue(String.class);
+                    editText.setText(message);
+                } else {
+                    
+                    editText.setText("");
+                    Toast.makeText(getActivity(), "Unable to load data", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    private void calanderCLicked(){
+        databaseReference.child(dateSelector).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null){
+                    editText.setText(snapshot.getValue().toString());
+                } else {
+                    editText.setError("Cannot be empty");
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+
+    public void buttonAddEvent(View view) {
+        databaseReference.child(dateSelector).setValue(editText.getText().toString());
+
+
     }
 }
+

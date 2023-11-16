@@ -76,6 +76,8 @@ public class RegisterActivity extends AppCompatActivity {
                     etpword.setError("A Password is required to register an account");
                     etpword.requestFocus();
 
+                    //TODO add more error handeling it got deleted
+
                 }
                 else if (etpword.length() < 6){
                     Toast.makeText(RegisterActivity.this, "Please enter a password Longer than 6 characters", Toast.LENGTH_SHORT).show();
@@ -116,6 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Your new Pin for your group is" + randomPin + " remeber to share it with your group :)", Toast.LENGTH_LONG).show();
                     groupPin[0] = randomPin.toString();
                     registerUser(fullName, userEmail, userPword, groupPin[0]);
+                    //generates random group pin and stores it in the firebase realtime database
 
                 }
             }
