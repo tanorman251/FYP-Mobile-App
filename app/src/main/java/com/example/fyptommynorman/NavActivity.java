@@ -24,7 +24,7 @@ public class NavActivity extends AppCompatActivity {
         setContentView(R.layout.activity_nav);
         pager = findViewById(R.id.pager);
         bottomNav = findViewById(R.id.bottomNavBar);
-//this makes it so the user can slide between the fragments and select which fragment they want on the bottom navigation bar
+//this makes it so the user can slide between the fragments and select which fragment they want on the bottom navigation barcv
 
 
 

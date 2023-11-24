@@ -1,14 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MessageFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Message" />
 
-</FrameLayout>
+<TextView
+    android:id="@+id/groupPin"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="20dp"
+    android:text="PIN"
+    android:textSize="20sp"/>
+
+    <ListView
+        android:id="@+id/messagesLv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/groupPin"
+        android:layout_above="@id/linMessage"
+        android:transcriptMode="alwaysScroll"
+        android:stackFromBottom="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linMessage"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_marginBottom="70dp">
+
+        <EditText
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/messageET"
+            android:hint="Enter Message Here"
+            android:layout_weight="2"
+            android:inputType="textMultiLine"/>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sendBtn"
+            android:src="@drawable/baseline_send_24"/>
+
+    </LinearLayout>
+</RelativeLayout>

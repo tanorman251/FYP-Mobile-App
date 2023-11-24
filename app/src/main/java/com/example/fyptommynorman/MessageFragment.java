@@ -2,11 +2,35 @@ package com.example.fyptommynorman;
 
 import android.os.Bundle;
 
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import android.R.layout.*;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +47,19 @@ public class MessageFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
+    private ImageButton sendMsg;
+    private TextView groupName;
+    private ListView displayMsg;
+    private EditText typeMsg;
+    private DatabaseReference databaseReference, databaseReference2;
+    private FirebaseAuth authUser;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseDatabase db;
+    private FirebaseUser currentUser;
+    private List<String> messageList;
+    private ArrayAdapter<String> messageAdapter;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -58,7 +95,118 @@ public class MessageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_message, container, false);
+
+        groupName = view.findViewById(R.id.groupPin);
+        displayMsg = view.findViewById(R.id.messagesLv);
+        typeMsg = view.findViewById(R.id.messageET);
+
+
+
+        authUser = FirebaseAuth.getInstance();
+        currentUser = authUser.getCurrentUser();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        db = FirebaseDatabase.getInstance();
+        if (currentUser != null){
+
+            String currentUserId = currentUser.getUid();
+            DatabaseReference pin = db.getReference("User").child(currentUserId).child("pin");
+            databaseReference = pin;
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    String currentUserPin =snapshot.getValue(String.class);
+                    groupName.setText("Group Pin: "+ currentUserPin);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                // TODO ADD ERROR HANDELING
+                }
+            });
+
+            databaseReference2 = FirebaseDatabase.getInstance().getReference("Messages");
+            messageList = new ArrayList<>();
+            messageAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1 ,messageList);
+            messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            displayMsg.setAdapter(messageAdapter);
+
+            loadMsg();
+
+            databaseReference2.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                    String message = snapshot.getValue(String.class);
+                    messageList.add(message);
+                    messageAdapter.notifyDataSetChanged();
+
+                    //TODO hanel errors aand other event listeners
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            sendMsg = view.findViewById(R.id.sendBtn);
+            sendMsg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    sendMessage();
+                }
+            });
+
+            //TODO COMPLETE THIS FUNCTION
+        }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_message, container, false);
+        return view;
+    }
+
+    private void sendMessage() {
+
+        String text = typeMsg.getText().toString().trim();
+        if (text.isEmpty()){
+            Toast.makeText(getContext(), "PLeasee enter a message", Toast.LENGTH_SHORT).show();
+        } else {
+            databaseReference2.push().setValue(text);
+        }
+    }
+
+    private void loadMsg() {
+
+        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot msgSnapshot : snapshot.getChildren()){
+                    String message = msgSnapshot.getValue(String.class);
+                    messageList.add(message);
+
+                }
+                messageAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+        // TODO handel errors here
+            }
+        });
     }
 }
+
+//TODO delete message after sending, add pin to each message, add name of user and time maybe??
