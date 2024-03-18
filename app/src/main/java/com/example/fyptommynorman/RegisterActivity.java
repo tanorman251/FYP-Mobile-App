@@ -116,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                     int pin = 100000 + random.nextInt(900000);
                     String randomPin = String.valueOf(pin);
                     Toast.makeText(RegisterActivity.this, "Your new Pin for your group is" + randomPin + " remeber to share it with your group :)", Toast.LENGTH_LONG).show();
-                    groupPin[0] = randomPin.toString();
+                    groupPin[0] = randomPin;
                     registerUser(fullName, userEmail, userPword, groupPin[0]);
                     //generates random group pin and stores it in the firebase realtime database
 

@@ -111,7 +111,7 @@ public class CalanderFragment extends Fragment {
         calanderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                dateSelector = Integer.toString(i) + Integer.toString(i1+1) + Integer.toString(i2);
+                dateSelector = Integer.toString(i) + (i1 + 1) + i2;
                 calanderCLicked();
 
             }

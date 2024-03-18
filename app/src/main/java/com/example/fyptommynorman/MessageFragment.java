@@ -28,13 +28,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link MessageFragment#newInstance} factory method to
+ * create an instance of this fragment.
  * create an instance of this fragment.
  */
 public class MessageFragment extends Fragment {
@@ -60,6 +63,8 @@ public class MessageFragment extends Fragment {
     private FirebaseUser currentUser;
     private List<String> messageList;
     private ArrayAdapter<String> messageAdapter;
+
+    private String groupPin;
 
     public MessageFragment() {
         // Required empty public constructor
@@ -110,6 +115,18 @@ public class MessageFragment extends Fragment {
         if (currentUser != null){
 
             String currentUserId = currentUser.getUid();
+            DatabaseReference gpinRef = db.getReference("User").child(currentUserId).child("pin");
+            gpinRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                    groupPin = dataSnapshot.getValue(String.class);
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+
+                }
+            });
             DatabaseReference pin = db.getReference("User").child(currentUserId).child("pin");
             databaseReference = pin;
             databaseReference.addValueEventListener(new ValueEventListener() {
@@ -136,9 +153,24 @@ public class MessageFragment extends Fragment {
             databaseReference2.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                    String message = snapshot.getValue(String.class);
-                    messageList.add(message);
-                    messageAdapter.notifyDataSetChanged();
+                    //if (snapshot.exists()){
+                        //HashMap<String, Object> dataM = (HashMap<String, Object>) snapshot.getValue();
+
+                        //if(dataM != null && dataM.containsKey("Messages")) {
+                        //String message = (String) dataM.get("Messages");
+                       // messageList.add(message);
+                        //messageAdapter.notifyDataSetChanged();
+                    //}}
+                    //HashMap<String, Object> dataM = (HashMap<String, Object>) snapshot.getValue();
+                    //String message = (String) dataM.get("Messages");
+                    //String message = snapshot.getValue(String.class);
+                    try {
+                        String message = snapshot.getValue(String.class);
+                        messageList.add(message);
+                        messageAdapter.notifyDataSetChanged();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                     //TODO hanel errors aand other event listeners
                 }
@@ -181,16 +213,67 @@ public class MessageFragment extends Fragment {
     private void sendMessage() {
 
         String text = typeMsg.getText().toString().trim();
-        if (text.isEmpty()){
-            Toast.makeText(getContext(), "PLeasee enter a message", Toast.LENGTH_SHORT).show();
+        if (!text.isEmpty()){
+            if (currentUser != null && groupPin != null){
+                String message = groupPin + ":" + text;
+                databaseReference2.push().setValue(message);
+
+            }
         } else {
-            databaseReference2.push().setValue(text);
+            Toast.makeText(getContext(), "Please enter a message", Toast.LENGTH_SHORT).show();
+
+            /*if (currentUser != null){
+                String currentUserId = currentUser.getUid();
+                DatabaseReference userRef = db.getReference("User").child(currentUserId);
+                userRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                        String userPin = dataSnapshot.child("pin").getValue(String.class);
+                        databaseReference2.child(userPin).push().setValue(text);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+                    //handel error TODO handel errors
+                    }
+                });
+            }*/
+
+            //databaseReference2.push().setValue(text);
         }
     }
 
     private void loadMsg() {
+        if(groupPin != null) {
+            databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                    messageList.clear();
+                    for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()){
+                        String message = messageSnapshot.getValue(String.class);
+                        if (message != null){
+                            String[] delimeter = message.split(":");
+                            if (delimeter.length == 2 && delimeter[0].equals(groupPin)){
+                                Toast.makeText(getContext(), delimeter[1], Toast.LENGTH_LONG).show();
 
-        databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                messageList.add(delimeter[1]);
+
+                            }
+                        }
+                    }
+                    messageAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+
+                }
+            });
+
+
+        }}};
+
+       /* databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot msgSnapshot : snapshot.getChildren()){
@@ -205,8 +288,8 @@ public class MessageFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
         // TODO handel errors here
             }
-        });
-    }
-}
+        });*/
+
+
 
 //TODO delete message after sending, add pin to each message, add name of user and time maybe??

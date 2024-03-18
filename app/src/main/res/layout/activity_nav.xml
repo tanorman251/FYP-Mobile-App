@@ -22,16 +22,16 @@
         android:layout_marginHorizontal="15dp"
         android:background="@color/lpink">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:backgroundTint="@color/white"
-        app:menu="@menu/menu_bottom_nav_bar"
-        app:itemIconTint="@color/nav_bar_colours"
-        app:itemTextColor="@color/nav_bar_colours"
-        android:background="@color/lpink"></com.google.android.material.bottomnavigation.BottomNavigationView>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNavBar"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_alignParentBottom="true"
+                android:backgroundTint="@color/white"
+                app:menu="@menu/menu_bottom_nav_bar"
+                app:itemIconTint="@color/nav_bar_colours"
+                app:itemTextColor="@color/nav_bar_colours"
+                android:background="@color/lpink"/>
 
 
     </androidx.cardview.widget.CardView>

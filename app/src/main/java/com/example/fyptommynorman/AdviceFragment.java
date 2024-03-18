@@ -62,3 +62,5 @@ public class AdviceFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_advice, container, false);
     }
 }
+
+//TODO GOT WORK BACK WOOOOOOOOOO< USE INTELIGE IDEA INSTEAD OF ANDROID STUDIOS
