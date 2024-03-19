@@ -217,6 +217,7 @@ public class MessageFragment extends Fragment {
             if (currentUser != null && groupPin != null){
                 String message = groupPin + ":" + text;
                 databaseReference2.push().setValue(message);
+                typeMsg.getText().clear();
 
             }
         } else {
@@ -253,7 +254,7 @@ public class MessageFragment extends Fragment {
                         String message = messageSnapshot.getValue(String.class);
                         if (message != null){
                             String[] delimeter = message.split(":");
-                            if (delimeter.length == 2 && delimeter[0].equals(groupPin)){
+                            if (delimeter[0].equals(groupPin)){
                                 Toast.makeText(getContext(), delimeter[1], Toast.LENGTH_LONG).show();
 
                                 messageList.add(delimeter[1]);
@@ -261,7 +262,10 @@ public class MessageFragment extends Fragment {
                             }
                         }
                     }
+                    messageAdapter.addAll(messageList);
+                    displayMsg.setAdapter(messageAdapter);
                     messageAdapter.notifyDataSetChanged();
+
                 }
 
                 @Override

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filterOptions">
+
+        <item>All Advice </item>
+    <item>Budgeting</item>
+    <item>Mental Well-being</item>
+    <item>Money Saving Tips</item>
+    </string-array>
+</resources>
