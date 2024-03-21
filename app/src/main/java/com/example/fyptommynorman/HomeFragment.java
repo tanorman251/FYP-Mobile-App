@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,6 +36,8 @@ public class HomeFragment extends Fragment {
     private RatingBar ratingBar;
 
     private EditText feedbackEt;
+
+    private DatabaseReference databaseReference;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -86,6 +90,9 @@ public class HomeFragment extends Fragment {
 
         feedbackBtn.setOnClickListener(v -> submitFeedback());
 
+       // FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+       // databaseReference = firebaseDatabase.getReference("User-Feedback");
+
 
 
 
@@ -110,28 +117,37 @@ public class HomeFragment extends Fragment {
             Toast.makeText(getContext(), "Please enter your feedback", Toast.LENGTH_LONG).show();
             return;
         }
-        //EMAIL PASSWORD = SwF12345!  EMAIL = walletShareFeedback@outlook.com
-        String emailSubject = "User Feedback";
-        String emailReview = "Star Rating: " + starRating + " User Feedback: " + feedback;
-        String email = "walletShareFeedback@outlook.com";
 
-        Intent sendEmail = new Intent(Intent.ACTION_SENDTO);
-        sendEmail.setData(Uri.parse("mailto:" + email));
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User-Feedback");
+        databaseReference.push().setValue("Star Rating: " + starRating + "\n\nUser Feedback: " + feedback);
+        feedbackEt.getText().clear();
 
-        sendEmail.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
-        sendEmail.putExtra(Intent.EXTRA_TEXT, emailReview);
 
-        PackageManager packageManager = requireContext().getPackageManager();
 
-        if(sendEmail.resolveActivity(packageManager) != null){
-            startActivity(sendEmail);
 
-            Toast.makeText(getContext(), "Feedback Successfully Retrieved", Toast.LENGTH_LONG).show();
-            feedbackEt.getText().clear();
-        } else {
-            Toast.makeText(getContext(), "Server is currently down please try again later", Toast.LENGTH_LONG).show();
-            feedbackEt.getText().clear();
-        }
+
+//        //EMAIL PASSWORD = SwF12345!  EMAIL = walletShareFeedback@outlook.com
+//        String emailSubject = "User Feedback";
+//        String emailReview = "Star Rating: " + starRating + " User Feedback: " + feedback;
+//        String email = "walletShareFeedback@outlook.com";
+//
+//        Intent sendEmail = new Intent(Intent.ACTION_SENDTO);
+//        sendEmail.setData(Uri.parse("mailto:" + email));
+//
+//        sendEmail.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
+//        sendEmail.putExtra(Intent.EXTRA_TEXT, emailReview);
+//
+//        PackageManager packageManager = requireContext().getPackageManager();
+//
+//        if(sendEmail.resolveActivity(packageManager) != null){
+//            startActivity(sendEmail);
+//
+//            Toast.makeText(getContext(), "Feedback Successfully Retrieved", Toast.LENGTH_LONG).show();
+//            feedbackEt.getText().clear();
+//        } else {
+//            Toast.makeText(getContext(), "Server is currently down please try again later", Toast.LENGTH_LONG).show();
+//            feedbackEt.getText().clear();
+//        }
 
 
 
