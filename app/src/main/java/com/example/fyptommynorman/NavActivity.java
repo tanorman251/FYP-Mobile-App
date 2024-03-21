@@ -46,6 +46,11 @@ public class NavActivity extends AppCompatActivity {
         adapterView adapterView = new adapterView(this, fragmentArrayList);
 
         pager.setAdapter(adapterView);
+
+        pager.setCurrentItem(2);
+
+        bottomNav.setSelectedItemId(R.id.homeIc);
+
         pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -70,11 +75,12 @@ public class NavActivity extends AppCompatActivity {
 
 
                 super.onPageSelected(position);
-                pager.setCurrentItem(2);
+
             }
         });
         bottomNav.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
+
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
 

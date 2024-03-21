@@ -147,9 +147,9 @@ public class MessageFragment extends Fragment {
             messageAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1 ,messageList);
             messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             displayMsg.setAdapter(messageAdapter);
-
-            loadMsg();
-
+//adding twice
+           // loadMsg();
+            //displayMsg.setAdapter(messageAdapter);
             databaseReference2.addChildEventListener(new ChildEventListener() {
                 @Override
                 public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
@@ -165,9 +165,11 @@ public class MessageFragment extends Fragment {
                     //String message = (String) dataM.get("Messages");
                     //String message = snapshot.getValue(String.class);
                     try {
-                        String message = snapshot.getValue(String.class);
-                        messageList.add(message);
-                        messageAdapter.notifyDataSetChanged();
+                        loadMsg();
+                        //String message = snapshot.getValue(String.class);
+                        //messageList.add(message);
+                        //messageAdapter.addAll(messageList);
+                        //messageAdapter.notifyDataSetChanged();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -212,17 +214,43 @@ public class MessageFragment extends Fragment {
 
     private void sendMessage() {
 
-        String text = typeMsg.getText().toString().trim();
+
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("User").child(currentUser.getUid()).child("name");
+
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+            String userName = dataSnapshot.getValue(String.class);
+            String text = typeMsg.getText().toString().trim();
+            if(currentUser != null && groupPin != null){
+                String message = groupPin + ":" + text + "   -   " + userName;
+                databaseReference2.push().setValue(message);
+                typeMsg.getText().clear();
+            }else {
+                Toast.makeText(getContext(), "Please enter a message", Toast.LENGTH_SHORT).show();
+
+            }
+            }
+
+            @Override
+            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+
+            }
+        });
+
+        /*String text = typeMsg.getText().toString().trim();
         if (!text.isEmpty()){
             if (currentUser != null && groupPin != null){
-                String message = groupPin + ":" + text;
+                String message = groupPin + ":" + text + "-" + userName;
                 databaseReference2.push().setValue(message);
                 typeMsg.getText().clear();
 
             }
         } else {
             Toast.makeText(getContext(), "Please enter a message", Toast.LENGTH_SHORT).show();
-
+*/
             /*if (currentUser != null){
                 String currentUserId = currentUser.getUid();
                 DatabaseReference userRef = db.getReference("User").child(currentUserId);
@@ -242,7 +270,7 @@ public class MessageFragment extends Fragment {
 
             //databaseReference2.push().setValue(text);
         }
-    }
+
 
     private void loadMsg() {
         if(groupPin != null) {
@@ -263,8 +291,11 @@ public class MessageFragment extends Fragment {
                         }
                     }
                     messageAdapter.addAll(messageList);
-                    displayMsg.setAdapter(messageAdapter);
                     messageAdapter.notifyDataSetChanged();
+                    //return;
+
+                    //displayMsg.setAdapter(messageAdapter);
+                    //messageAdapter.notifyDataSetChanged();
 
                 }
 

@@ -7,6 +7,7 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+            android:id="@+id/titleHome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome to WalletShare"
@@ -32,5 +33,40 @@
             android:src="@drawable/baseline_person_24"
             android:layout_alignParentEnd="true"
     />
+
+    <TextView
+    android:id="@+id/textViewFeedback"
+    android:text="PLease leave us some feedback below :)"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_below="@+id/titleHome"
+    android:layout_margin="50dp"
+    android:layout_centerHorizontal="true"
+    android:textColor="@color/black"
+    android:textSize="15sp"/>
+
+    <RatingBar
+    android:id="@+id/userRating"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_below="@+id/textViewFeedback"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="20dp"/>
+
+    <EditText
+    android:id="@+id/feedbackEt"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_below="@+id/userRating"
+    android:padding="15sp"
+     android:layout_margin="20sp"   />
+
+    <Button
+    android:id="@+id/feedbackBtn"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_margin="20sp"
+    android:layout_below="@+id/feedbackEt"
+    android:text="SEND FEEDBACK"/>
 
 </RelativeLayout>

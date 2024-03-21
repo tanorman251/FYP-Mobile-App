@@ -19,6 +19,7 @@
         android:layout_margin="20dp"/>
 
     <EditText
+
         android:id="@+id/etEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +27,8 @@
         android:hint="Enter a upcoming bill"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+        app:layout_constraintTop_toBottomOf="@+id/calendarView"
+    />
 
     <Button
         android:id="@+id/addButton"
@@ -37,21 +39,16 @@
         app:layout_constraintTop_toBottomOf="@+id/calendarView"
         android:onClick="buttonAddEvent"/>
 
-    <TextView
-        android:id="@+id/billTv"
+    <ListView
+        android:id="@+id/eventListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/etEvent"/>
-
-    <Spinner
-        android:id="@+id/eventSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:minHeight="48dp"
-        app:layout_constraintTop_toBottomOf="@+id/addButton">
+        app:layout_constraintTop_toBottomOf="@+id/addButton"
+    android:stackFromBottom="true">
 
 
-    </Spinner>
+    </ListView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

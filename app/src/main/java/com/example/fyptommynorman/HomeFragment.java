@@ -1,7 +1,11 @@
 package com.example.fyptommynorman;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
+import android.widget.*;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -23,6 +27,13 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ImageButton profileBtn, settingsBtn;
+
+    private Button feedbackBtn;
+    private RatingBar ratingBar;
+
+    private EditText feedbackEt;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -59,11 +70,72 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
         // Inflate the layout for this fragment
 
+        settingsBtn = view.findViewById(R.id.settingsBtn);
+
+        profileBtn   = view.findViewById(R.id.profileBtn);
 
 
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        ratingBar = view.findViewById(R.id.userRating);
+
+        feedbackBtn = view.findViewById(R.id.feedbackBtn);
+
+        feedbackEt = view.findViewById(R.id.feedbackEt);
+
+        feedbackBtn.setOnClickListener(v -> submitFeedback());
+
+
+
+
+
+        profileBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //open profile
+            }
+        });
+
+        return view;
+    }
+
+    private void submitFeedback() {
+
+        //TODO IF I CANT WORK OUT EMAIL, JUST SENd |TO Firebase
+        //EAJBXM4VYNLVFLYC4SZJM5D3 twillo recovery code
+        float starRating = ratingBar.getRating();
+        String feedback = feedbackEt.getText().toString().trim();
+        if (feedback.isEmpty()){
+            Toast.makeText(getContext(), "Please enter your feedback", Toast.LENGTH_LONG).show();
+            return;
+        }
+        //EMAIL PASSWORD = SwF12345!  EMAIL = walletShareFeedback@outlook.com
+        String emailSubject = "User Feedback";
+        String emailReview = "Star Rating: " + starRating + " User Feedback: " + feedback;
+        String email = "walletShareFeedback@outlook.com";
+
+        Intent sendEmail = new Intent(Intent.ACTION_SENDTO);
+        sendEmail.setData(Uri.parse("mailto:" + email));
+
+        sendEmail.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
+        sendEmail.putExtra(Intent.EXTRA_TEXT, emailReview);
+
+        PackageManager packageManager = requireContext().getPackageManager();
+
+        if(sendEmail.resolveActivity(packageManager) != null){
+            startActivity(sendEmail);
+
+            Toast.makeText(getContext(), "Feedback Successfully Retrieved", Toast.LENGTH_LONG).show();
+            feedbackEt.getText().clear();
+        } else {
+            Toast.makeText(getContext(), "Server is currently down please try again later", Toast.LENGTH_LONG).show();
+            feedbackEt.getText().clear();
+        }
+
+
+
+
+
     }
 }

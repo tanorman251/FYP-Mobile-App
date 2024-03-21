@@ -2,31 +2,26 @@ package com.example.fyptommynorman;
 
 import android.os.Bundle;
 
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import java.util.WeakHashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +41,7 @@ public class CalanderFragment extends Fragment {
 
 
     private CalendarView calanderView;
-    private EditText editText;
+    private EditText billEditText;
 
     private String dateSelector;
 
@@ -55,7 +50,21 @@ public class CalanderFragment extends Fragment {
     private Spinner eventSpinner;
     private DatabaseReference databaseReference;
 
-    private List<String> eventList;
+   // private List<String> eventList;
+
+    private ListView eventLv;
+
+    private FirebaseAuth authUser;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseDatabase db;
+    private FirebaseUser currentUser;
+
+    private String groupPin;
+
+    private ArrayAdapter<String> billsAdapter;
+    private ArrayList<String> billsList;
+
+
 
     public CalanderFragment() {
         // Required empty public constructor
@@ -94,63 +103,58 @@ public class CalanderFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_calander, container, false);
 
         calanderView = view.findViewById(R.id.calendarView);
-        editText = view.findViewById(R.id.etEvent);
+        billEditText = view.findViewById(R.id.etEvent);
 
-        eventSpinner = view.findViewById(R.id.eventSpinner);
+        eventLv = view.findViewById(R.id.eventListView);
 
         Button button = view.findViewById(R.id.addButton);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                buttonAddEvent(view);
-            }
-        });
 
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
 
-
-        calanderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                dateSelector = Integer.toString(i) + (i1 + 1) + i2;
-                calanderCLicked();
-
-            }
-        });
-
-
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Calendar");
-        eventList = new ArrayList<>();
-
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    eventList.add(dataSnapshot.getKey());
+        if(currentUser != null){
+            String userId = currentUser.getUid();
+            DatabaseReference userRef = databaseReference.child("User").child(userId);
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()){
+                        groupPin = dataSnapshot.child("pin").getValue(String.class);
+                        loadBills();
+                    }
                 }
 
-                ArrayAdapter<String> adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_spinner_item, eventList);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                eventSpinner.setAdapter(adapter);
-            }
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+                //Toast.makeText(getContext(), "")
+                }
+            });
+        }
 
+        billsList = new ArrayList<>();
+        billsAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, billsList);
+        eventLv.setAdapter(billsAdapter);
+        
+        calanderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                dateSelector = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
             }
         });
-        eventSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                String eventSelected = eventList.get(position);
-                eventSpinnerItem(eventSelected);
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
+    button.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            addBill();
+        }
+    });
 
-            }
-        });
+
+//
+//
+//
+//
         
         
         return view;
@@ -158,55 +162,62 @@ public class CalanderFragment extends Fragment {
 
     }
 
-    private void eventSpinnerItem(String eventSelected) {
-        
-        databaseReference.child(eventSelected).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void addBill() {
+        String billName = billEditText.getText().toString().trim();
+        if (!billName.isEmpty()){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+//            String date = dateFormat.format(new Date());
+            String date = dateSelector;
+
+            String key = databaseReference.child("bills").push().getKey();
+            if (key != null){
+                Map<String, Object> billsMap = new HashMap<>();
+                billsMap.put("text", billName);
+                billsMap.put("date", date);
+                billsMap.put("pin", groupPin);
+
+                databaseReference.child("bills").child(key).setValue(billsMap).addOnSuccessListener(aVoid -> {
+                    billEditText.setText("");
+                }).addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "PLease enter a name testingggggggg", Toast.LENGTH_LONG).show();
+
+                });
+
+
+
+
+            }
+        } else {
+            //tpast
+        }
+    }
+
+    private void loadBills() {
+        DatabaseReference billsRef = databaseReference.child("bills");
+        billsRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
-                    String message = snapshot.getValue(String.class);
-                    editText.setText(message);
-                } else {
-                    
-                    editText.setText("");
-                    Toast.makeText(getActivity(), "Unable to load data", Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                billsList.clear();
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    String text = snapshot.child("text").getValue(String.class);
+                    String date = snapshot.child("date").getValue(String.class);
+                    String pin = snapshot.child("pin").getValue(String.class);
+
+                    if(groupPin != null && groupPin.equals(pin)){
+                        billsList.add(text + "   -   " + date);
+                    }
+
                 }
+                billsAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
 
             }
         });
-    }
-
-
-    private void calanderCLicked(){
-        databaseReference.child(dateSelector).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.getValue() != null){
-                    editText.setText(snapshot.getValue().toString());
-                } else {
-                    editText.setError("Cannot be empty");
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-    }
-
-
-
-    public void buttonAddEvent(View view) {
-        databaseReference.child(dateSelector).setValue(editText.getText().toString());
-
-
     }
 }
+
+
 

@@ -92,7 +92,6 @@ public class MoneyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_money, container, false);
-
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null){
             String userId = currentUser.getUid();
@@ -200,6 +199,7 @@ public class MoneyFragment extends Fragment {
         eItem expenseItem = new eItem(itemName, amount, desc, userId, usersGpin);
         expenseList.add(expenseItem);
         expenseAA.notifyDataSetChanged();
+
 
         totalEx += amount;
         refreshUi();

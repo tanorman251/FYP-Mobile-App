@@ -98,14 +98,7 @@ public class AdviceFragment extends Fragment {
             return listItem;
     }
 
-       /* private int getIndex(Spinner spinner, String text) {
-            for (int i = 0; i < spinner.getCount(); i++){
-                if(spinner.getItemAtPosition(i).toString().equalsIgnoreCase(text)){
-                    return i;
-                }
-            }
-            return 0;
-        }*/
+
 
 
     }
@@ -136,11 +129,12 @@ public class AdviceFragment extends Fragment {
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         filterSpinner.setAdapter(spinnerAdapter);
 
+
         chatbotBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO ADD CODE TO OPEN API
-                Toast.makeText(requireContext(), "Opening chatbot...", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "Chatbot coming soon...", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -154,27 +148,42 @@ public class AdviceFragment extends Fragment {
 
                 String selectedFilter = parent.getItemAtPosition(position).toString();
                 List<filterdAdvice> filterdList = new ArrayList<>();
+                //adviceAdapter.clear();
+                //adviceAdapter.notifyDataSetChanged();
 
                 for (filterdAdvice advice : allAdvice){
                     if (advice.getFilter().equals(selectedFilter)){
                         filterdList.add(advice);
+                    } else {
+                        //filterdList.remove(advice);
+                        //adviceAdapter.remove(advice);
                     }
                 }
-               //adviceAdapter.clear();
-                //adviceAdapter.notifyDataSetChanged();
+//                adviceAdapter.clear();
+//                adviceLv.setAdapter(adviceAdapter);
+//                adviceAdapter.notifyDataSetChanged();
 
                 adviceAdapter.addAll(filterdList);
 
-
+                adviceAdapter.notifyDataSetChanged();
 
                 adviceLv.setAdapter(adviceAdapter);
+
+                //changed below
+//                FilterdAdviceAdapter adviceAdapter2 = null;
+//                adviceAdapter2.addAll(filterdList);
+//                adviceAdapter2.notifyDataSetChanged();
+//                adviceLv.setAdapter(adviceAdapter2);
+
+
+                //adviceLv.setAdapter(adviceAdapter);
                // adviceAdapter.notifyDataSetChanged();
 
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-            adviceLv.setAdapter((ListAdapter) allAdvice);
+            //adviceLv.setAdapter((ListAdapter) allAdvice);
             }
         });
 
