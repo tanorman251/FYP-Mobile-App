@@ -94,13 +94,22 @@ public class HomeFragment extends Fragment {
        // databaseReference = firebaseDatabase.getReference("User-Feedback");
 
 
+        settingsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), SettingsActivity.class);
+                startActivity(intent);
+
+            }
+        });
 
 
 
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //open profile
+                Intent intent = new Intent(getContext(), UserProfileActivity.class);
+                startActivity(intent);
             }
         });
 

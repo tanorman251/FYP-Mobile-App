@@ -159,9 +159,11 @@ public class MoneyFragment extends Fragment {
 
     private void refreshUi() {
         amountOwed = calulateAmountUsersOwed();
+
         userOwedTv.setText("You Are Owed: £" + String.format("%.2f", amountOwed));
 
         toPay = totalEx / expenseList.size();
+
         userIncomeTv.setText("You need to pay: £" + String.format("%.2f", toPay));
 
         //only show same group
@@ -197,6 +199,7 @@ public class MoneyFragment extends Fragment {
         String desc = descEt.getText().toString();
 
         eItem expenseItem = new eItem(itemName, amount, desc, userId, usersGpin);
+
         expenseList.add(expenseItem);
         expenseAA.notifyDataSetChanged();
 

@@ -179,7 +179,6 @@ public class CalanderFragment extends Fragment {
                 databaseReference.child("bills").child(key).setValue(billsMap).addOnSuccessListener(aVoid -> {
                     billEditText.setText("");
                 }).addOnFailureListener(e -> {
-                    Toast.makeText(getContext(), "PLease enter a name testingggggggg", Toast.LENGTH_LONG).show();
 
                 });
 
@@ -188,7 +187,7 @@ public class CalanderFragment extends Fragment {
 
             }
         } else {
-            //tpast
+            //
         }
     }
 

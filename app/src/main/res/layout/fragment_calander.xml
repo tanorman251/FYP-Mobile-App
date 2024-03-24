@@ -19,7 +19,7 @@
         android:layout_margin="20dp"/>
 
     <EditText
-
+            android:gravity="center_horizontal"
         android:id="@+id/etEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,9 +42,9 @@
     <ListView
             android:id="@+id/eventListView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-
+            android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/addButton"
+
             android:stackFromBottom="true" tools:ignore="NestedScrolling"/>
 
 

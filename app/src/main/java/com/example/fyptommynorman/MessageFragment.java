@@ -147,7 +147,7 @@ public class MessageFragment extends Fragment {
             messageAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1 ,messageList);
             messageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             displayMsg.setAdapter(messageAdapter);
-//adding twice
+            //adding twice
            // loadMsg();
             //displayMsg.setAdapter(messageAdapter);
             databaseReference2.addChildEventListener(new ChildEventListener() {
@@ -283,7 +283,7 @@ public class MessageFragment extends Fragment {
                         if (message != null){
                             String[] delimeter = message.split(":");
                             if (delimeter[0].equals(groupPin)){
-                                Toast.makeText(getContext(), delimeter[1], Toast.LENGTH_LONG).show();
+
 
                                 messageList.add(delimeter[1]);
 

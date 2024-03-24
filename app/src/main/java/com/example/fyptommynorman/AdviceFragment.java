@@ -144,43 +144,47 @@ public class AdviceFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-
-
                 String selectedFilter = parent.getItemAtPosition(position).toString();
-                List<filterdAdvice> filterdList = new ArrayList<>();
-                //adviceAdapter.clear();
-                //adviceAdapter.notifyDataSetChanged();
 
-                for (filterdAdvice advice : allAdvice){
-                    if (advice.getFilter().equals(selectedFilter)){
-                        filterdList.add(advice);
-                    } else {
-                        //filterdList.remove(advice);
-                        //adviceAdapter.remove(advice);
+                if (selectedFilter.equals("All Advice")) {
+                    adviceLv.setAdapter(adviceAdapter);
+                } else {
+
+
+                    List<filterdAdvice> filterdList = new ArrayList<>();
+                    for (filterdAdvice advice : allAdvice) {
+                        if (advice.getFilter().equals(selectedFilter)) {
+                            filterdList.add(advice);
+                        }
+
                     }
-                }
+                    Log.d("testing: %d", filterdList.toString());
+
+                    FilterdAdviceAdapter filterdAdapter = new FilterdAdviceAdapter(requireContext(), filterdList);
+                    adviceLv.setAdapter(filterdAdapter);
+
 //                adviceAdapter.clear();
-//                adviceLv.setAdapter(adviceAdapter);
+//
+//                adviceAdapter.notifyDataSetChanged();
+//
+//                adviceAdapter.addAll(filterdList);
+//
 //                adviceAdapter.notifyDataSetChanged();
 
-                adviceAdapter.addAll(filterdList);
+                    //             adviceLv.setAdapter(adviceAdapter);
 
-                adviceAdapter.notifyDataSetChanged();
-
-                adviceLv.setAdapter(adviceAdapter);
-
-                //changed below
+                    //changed below
 //                FilterdAdviceAdapter adviceAdapter2 = null;
 //                adviceAdapter2.addAll(filterdList);
 //                adviceAdapter2.notifyDataSetChanged();
 //                adviceLv.setAdapter(adviceAdapter2);
 
 
-                //adviceLv.setAdapter(adviceAdapter);
-               // adviceAdapter.notifyDataSetChanged();
+                    //adviceLv.setAdapter(adviceAdapter);
+                    // adviceAdapter.notifyDataSetChanged();
 
+                }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             //adviceLv.setAdapter((ListAdapter) allAdvice);
@@ -192,4 +196,3 @@ public class AdviceFragment extends Fragment {
 
 }
 
-//TODO GOT WORK BACK WOOOOOOOOOO< USE INTELIGE IDEA INSTEAD OF ANDROID STUDIOS
