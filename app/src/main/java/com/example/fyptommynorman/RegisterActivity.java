@@ -32,9 +32,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etname, etpword, etemail;
     private RadioGroup rggroup;
     private RadioButton rbJoin, rbCreate;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,10 +104,6 @@ public class RegisterActivity extends AppCompatActivity {
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
 
-
-
-
-
                 } else if (selectedGroupChoice == R.id.createrbtn) {
                     Random random = new Random();
                     int pin = 100000 + random.nextInt(900000);
@@ -123,9 +116,6 @@ public class RegisterActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-
     }
 
     private void registerUser(String fullName, String userEmail, String userPword, String groupPin) {
@@ -138,10 +128,7 @@ public class RegisterActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(RegisterActivity.this, "User Successfully Registered", Toast.LENGTH_LONG).show();
                     FirebaseUser firebaseuser = auth.getCurrentUser();
-
-
                     //add info to database about user
-
                     readWriteData writeUserDetails = new readWriteData(fullName, groupPin);
                     DatabaseReference userProfile = FirebaseDatabase.getInstance().getReference("User");
                     userProfile.child(firebaseuser.getUid()).setValue(writeUserDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -156,13 +143,9 @@ public class RegisterActivity extends AppCompatActivity {
                                 Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                                 startActivity(intent);
                             }
-
-
                         }
                     });
                 }
             }
-
-
         });
     }}

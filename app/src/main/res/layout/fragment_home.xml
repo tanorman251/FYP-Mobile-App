@@ -67,6 +67,7 @@
     android:layout_width="match_parent"
     android:layout_margin="20sp"
     android:layout_below="@+id/feedbackEt"
-    android:text="SEND FEEDBACK"/>
+    android:text="SEND FEEDBACK"
+    android:backgroundTint="@color/purpureous"/>
 
 </RelativeLayout>

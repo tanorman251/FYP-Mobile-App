@@ -7,10 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="lpink">#FFAAAB</color>
-    <color name="orange">#FEB300</color>
+
     <color name="dpink">#FF5E6C</color>
     <color name="tan">#FFF5D7</color>
     <color name="white">#FFFFFF</color>
+
+    <color name="richBlack">#0D1321</color>
+    <color name="Jasper">#BF4E30</color>
+    <color name="lightGreen">#90E39A</color>
+    <color name="purpureous">#AF2BBF</color>
+    <color name="lavender">#E5EAFA</color>
+
+
 
 
 </resources>

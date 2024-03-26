@@ -1,5 +1,7 @@
 package com.example.fyptommynorman;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.widget.*;
@@ -10,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -104,16 +108,13 @@ public class CalanderFragment extends Fragment {
 
         calanderView = view.findViewById(R.id.calendarView);
         billEditText = view.findViewById(R.id.etEvent);
-
         eventLv = view.findViewById(R.id.eventListView);
-
         Button button = view.findViewById(R.id.addButton);
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseAuth auth = FirebaseAuth.getInstance();
         currentUser = auth.getCurrentUser();
 
-        if(currentUser != null){
+        if(currentUser != null) {
             String userId = currentUser.getUid();
             DatabaseReference userRef = databaseReference.child("User").child(userId);
             userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -124,22 +125,73 @@ public class CalanderFragment extends Fragment {
                         loadBills();
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-                //Toast.makeText(getContext(), "")
+
                 }
             });
         }
-
         billsList = new ArrayList<>();
         billsAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, billsList);
         eventLv.setAdapter(billsAdapter);
-        
         calanderView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 dateSelector = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
+            }
+        });
+
+        eventLv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedBill = (String) parent.getItemAtPosition(position)  ;
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle("Confirm?").setMessage("Are you sure you want to delete this expense for everyone in your group?").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //extract date and text to remove from db
+                        String[] split = selectedBill.split("   -   ");
+                        String text = split[0];
+                        String date = split[1];
+                        //String[] pin = selectedBill.split("   -   ");
+                       // String pin = pin;
+                        DatabaseReference billsRef = databaseReference.child("bills");
+                        billsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren() ){
+                                    String textDb = dataSnapshot1.child("text").getValue(String.class);
+                                    String dateDb = dataSnapshot1.child("date").getValue(String.class);
+                                    String pinDb = dataSnapshot1.child("pin").getValue(String.class);
+
+                                    if (textDb != null && dateDb!= null && pinDb!= null && textDb.equals(text) && dateDb.equals(date) && groupPin.equals(pinDb)){
+                                        dataSnapshot1.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Toast.makeText(getContext(), "Item successfully deleted", Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull @NotNull Exception e) {
+                                                Toast.makeText(getContext(), "Failed to delete item", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                        break;
+                                    }
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+                            }
+                        });
+                    }
+                })
+                        .setNegativeButton("No", null)
+                        .show();
+
+
+                return true;
             }
         });
 
@@ -149,24 +201,14 @@ public class CalanderFragment extends Fragment {
             addBill();
         }
     });
-
-
-//
-//
-//
-//
-        
-        
         return view;
-
-
     }
 
     private void addBill() {
         String billName = billEditText.getText().toString().trim();
         if (!billName.isEmpty()){
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
-//            String date = dateFormat.format(new Date());
+            //SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+//          String date = dateFormat.format(new Date());
             String date = dateSelector;
 
             String key = databaseReference.child("bills").push().getKey();
@@ -175,19 +217,13 @@ public class CalanderFragment extends Fragment {
                 billsMap.put("text", billName);
                 billsMap.put("date", date);
                 billsMap.put("pin", groupPin);
-
                 databaseReference.child("bills").child(key).setValue(billsMap).addOnSuccessListener(aVoid -> {
                     billEditText.setText("");
                 }).addOnFailureListener(e -> {
-
                 });
-
-
-
-
             }
         } else {
-            //
+
         }
     }
 
@@ -205,11 +241,9 @@ public class CalanderFragment extends Fragment {
                     if(groupPin != null && groupPin.equals(pin)){
                         billsList.add(text + "   -   " + date);
                     }
-
                 }
                 billsAdapter.notifyDataSetChanged();
             }
-
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
 

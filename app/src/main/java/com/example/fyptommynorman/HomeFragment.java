@@ -81,7 +81,6 @@ public class HomeFragment extends Fragment {
 
         profileBtn   = view.findViewById(R.id.profileBtn);
 
-
         ratingBar = view.findViewById(R.id.userRating);
 
         feedbackBtn = view.findViewById(R.id.feedbackBtn);
@@ -90,21 +89,13 @@ public class HomeFragment extends Fragment {
 
         feedbackBtn.setOnClickListener(v -> submitFeedback());
 
-       // FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-       // databaseReference = firebaseDatabase.getReference("User-Feedback");
-
-
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), SettingsActivity.class);
                 startActivity(intent);
-
             }
         });
-
-
-
         profileBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,15 +106,14 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
     private void submitFeedback() {
 
-        //TODO IF I CANT WORK OUT EMAIL, JUST SENd |TO Firebase
+        //TODO IF I CANT WORK OUT EMAIL, JUST SEND TO Firebase which ive done
         //EAJBXM4VYNLVFLYC4SZJM5D3 twillo recovery code
         float starRating = ratingBar.getRating();
         String feedback = feedbackEt.getText().toString().trim();
         if (feedback.isEmpty()){
-            Toast.makeText(getContext(), "Please enter your feedback", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "Please enter your feedback before submitting...", Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -134,7 +124,7 @@ public class HomeFragment extends Fragment {
 
 
 
-
+//         send feedback to the email not working
 //        //EMAIL PASSWORD = SwF12345!  EMAIL = walletShareFeedback@outlook.com
 //        String emailSubject = "User Feedback";
 //        String emailReview = "Star Rating: " + starRating + " User Feedback: " + feedback;

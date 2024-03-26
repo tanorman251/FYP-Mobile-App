@@ -17,10 +17,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-
     private FirebaseAuth firebaseAuth;
     private EditText etEmail, etPword;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,28 +35,26 @@ public class LoginActivity extends AppCompatActivity {
                 String email = etEmail.getText().toString();
 
                 if (TextUtils.isEmpty(email)) {
-                    Toast.makeText(LoginActivity.this, "Eamail is required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Email is required", Toast.LENGTH_SHORT).show();
                     etEmail.setError("Please enter an email");
                     etEmail.requestFocus();
                 } else{
                     loginUser(email, pword);
-
                     }
                 }
             });
         }
-  //TODO add more error handeling such as see if the email fits the tight pattern i.e @ and check if everything is empty
+  //TODO add more error handling such as see if the email fits the tight pattern i.e @ and check if everything is empty
     private void loginUser(String email, String pword) {
         firebaseAuth.signInWithEmailAndPassword(email, pword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(LoginActivity.this, "sucsess", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Logged In Successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginActivity.this, NavActivity.class);
                     startActivity(intent);
                 }
             }
         });
     }
-
     }

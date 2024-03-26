@@ -106,8 +106,6 @@ public class MessageFragment extends Fragment {
         displayMsg = view.findViewById(R.id.messagesLv);
         typeMsg = view.findViewById(R.id.messageET);
 
-
-
         authUser = FirebaseAuth.getInstance();
         currentUser = authUser.getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -174,30 +172,23 @@ public class MessageFragment extends Fragment {
                         e.printStackTrace();
                     }
 
-                    //TODO hanel errors aand other event listeners
+                    //TODO handel errors and other event listeners
                 }
-
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
                 }
-
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot snapshot) {
 
                 }
-
                 @Override
                 public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
-
                 }
             });
-
             sendMsg = view.findViewById(R.id.sendBtn);
             sendMsg.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -211,13 +202,9 @@ public class MessageFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
-
     private void sendMessage() {
 
-
-
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("User").child(currentUser.getUid()).child("name");
-
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -270,8 +257,6 @@ public class MessageFragment extends Fragment {
 
             //databaseReference2.push().setValue(text);
         }
-
-
     private void loadMsg() {
         if(groupPin != null) {
             databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -284,7 +269,6 @@ public class MessageFragment extends Fragment {
                             String[] delimeter = message.split(":");
                             if (delimeter[0].equals(groupPin)){
 
-
                                 messageList.add(delimeter[1]);
 
                             }
@@ -293,19 +277,13 @@ public class MessageFragment extends Fragment {
                     messageAdapter.addAll(messageList);
                     messageAdapter.notifyDataSetChanged();
                     //return;
-
                     //displayMsg.setAdapter(messageAdapter);
                     //messageAdapter.notifyDataSetChanged();
-
                 }
-
                 @Override
                 public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-
                 }
             });
-
-
         }}};
 
        /* databaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -322,9 +300,8 @@ public class MessageFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
         // TODO handel errors here
-            }
+
         });*/
 
 
 
-//TODO delete message after sending, add pin to each message, add name of user and time maybe??

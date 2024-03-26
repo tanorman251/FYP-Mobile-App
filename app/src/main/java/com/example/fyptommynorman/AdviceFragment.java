@@ -114,10 +114,19 @@ public class AdviceFragment extends Fragment {
         chatbotBtn = view.findViewById(R.id.chatbotBtn);
 
         this.allAdvice = new ArrayList<filterdAdvice>();
-        allAdvice.add(new filterdAdvice("test Budgeting", "Budgeting"));
-        allAdvice.add(new filterdAdvice("test budegting ", "Budgeting"));
-        allAdvice.add(new filterdAdvice("test mental", "Mental Well-being"));
-        allAdvice.add(new filterdAdvice("test money tips", "Money Saving Tips"));
+        allAdvice.add(new filterdAdvice("Consider taking up part time work over the holidays or weekends. Just make sure this wont affect your studies.", "General advice For students"));
+        allAdvice.add(new filterdAdvice("Make sure you have explored all the financial support that's available,University's often offer support in the form of scholarships and bursaries.", "General advice For students"));
+        allAdvice.add(new filterdAdvice("If your feeling overwhelmed, make sure you use the student support services available at your uni, from workshops to counseling.", "Mental Well-being"));
+        allAdvice.add(new filterdAdvice("Learn to budget and track your outgoings and incoming finances.", "Money Saving Tips"));
+        allAdvice.add(new filterdAdvice("Take advantage of student discount and deals where possible.", "Money Saving Tips"));
+        allAdvice.add(new filterdAdvice("Try to have a emergency fund available for unexpected costs such as broken laptops", "Money Saving Tips"));
+        allAdvice.add(new filterdAdvice("Always remember professional help is available if stress is affecting your daily life.", "Mental Well-being"));
+        allAdvice.add(new filterdAdvice("Try to maintain a healthy lifestyle by regularly exercising, eating healthily and getting enough sleep.", "General advice For students"));
+        allAdvice.add(new filterdAdvice("Prioritize essential items and avoid paying for unnecessary items.", "Money Saving Tips"));
+
+
+
+
         Log.d("AdviceFragment", "All Advice: " + allAdvice.toString());
 
 
@@ -134,7 +143,7 @@ public class AdviceFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO ADD CODE TO OPEN API
-                Toast.makeText(requireContext(), "Chatbot coming soon...", Toast.LENGTH_LONG).show();
+                Toast.makeText(requireContext(), "Chat-bot coming soon...", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -149,7 +158,6 @@ public class AdviceFragment extends Fragment {
                 if (selectedFilter.equals("All Advice")) {
                     adviceLv.setAdapter(adviceAdapter);
                 } else {
-
 
                     List<filterdAdvice> filterdList = new ArrayList<>();
                     for (filterdAdvice advice : allAdvice) {

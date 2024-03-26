@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,9 +8,7 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent">
+
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
@@ -19,9 +17,10 @@
         android:layout_margin="20dp"/>
 
     <EditText
+            app:layout_constraintStart_toStartOf="parent"
             android:gravity="center_horizontal"
         android:id="@+id/etEvent"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="Enter a upcoming bill"
@@ -32,19 +31,24 @@
 
     <Button
         android:id="@+id/addButton"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         android:text="ADD EXPENSE"
-        app:layout_constraintStart_toEndOf="@+id/etEvent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:backgroundTint="@color/purpureous"
+        app:layout_constraintTop_toBottomOf="@+id/etEvent"
         android:onClick="buttonAddEvent"/>
 
     <ListView
             android:id="@+id/eventListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             app:layout_constraintTop_toBottomOf="@+id/addButton"
-
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="70dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             android:stackFromBottom="true" tools:ignore="NestedScrolling"/>
 
 
@@ -52,4 +56,4 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</ScrollView>
+

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:background="@color/tan">
+    android:background="@color/lavender">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -88,8 +88,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/loginBtn"
             android:text="Login"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/dpink"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/purpureous"
             android:outlineAmbientShadowColor="@color/black"
             android:layout_below="@+id/pwordET"
             android:height="75sp"

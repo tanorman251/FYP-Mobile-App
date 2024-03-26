@@ -5,9 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@color/dpink"
+
     android:padding="10dp"
-    tools:ignore="ExtraText">
+    tools:ignore="ExtraText"
+    android:background="@color/lavender">
 
 
 
@@ -19,40 +20,34 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="400dp"
-        android:text="APP NAME"
+        android:text="Wallet Share"
         android:textStyle="bold"
         android:textSize="40sp"
-        android:textColor="@color/black"></TextView>>
+        android:textColor="@color/richBlack"></TextView>>
 
         <Button
+                android:textColor="@color/white"
+                android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/loginBtn"
             android:text="Login"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/tan"
-            android:outlineAmbientShadowColor="@color/black"
+            android:backgroundTint="@color/purpureous"
             android:layout_below="@+id/appName"
             android:height="75sp"
             android:layout_marginTop="35dp"></Button>>
 
         <Button
+                android:textColor="@color/white"
+                android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/registerBtn"
             android:text="Sign UP"
-            android:textColor="@color/black"
-            android:backgroundTint="@color/tan"
-            android:outlineAmbientShadowColor="@color/black"
+            android:backgroundTint="@color/purpureous"
             android:layout_below="@+id/loginBtn"
             android:height="75sp"
             android:layout_marginTop="20dp"></Button>
-
-
-
-
-
-
 
 
 </RelativeLayout>

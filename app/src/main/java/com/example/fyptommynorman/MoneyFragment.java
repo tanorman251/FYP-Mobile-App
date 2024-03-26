@@ -132,7 +132,6 @@ public class MoneyFragment extends Fragment {
             addExpense();
         }
     });
-
         return view;
     }
 
@@ -141,7 +140,6 @@ public class MoneyFragment extends Fragment {
         if (currentUser != null){
             String uid = currentUser.getUid();
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("User").child(uid);
-
             userRef.child("pin").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
@@ -182,10 +180,7 @@ public class MoneyFragment extends Fragment {
     private double calulateAmountUsersOwed() {
         double amountPaid = 0.0;
         for (eItem item : expenseList){
-
                 amountPaid += item.getAmount();
-
-            //return amountPaid - toPay;
         }
         return amountPaid - toPay;
     }
