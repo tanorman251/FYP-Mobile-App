@@ -43,7 +43,7 @@ public class MoneyFragment extends Fragment {
     private TextView userIncomeTv;
     private TextView userOwedTv;
     private List<eItem> expenseList;
-    private ArrayAdapter<eItem> expenseAA;
+    private ArrayAdapter<eItem> toPayAdapter, amountOwedAdapter;
 
     private DatabaseReference moneyDb;
     
@@ -106,9 +106,12 @@ public class MoneyFragment extends Fragment {
         userOwedTv = view.findViewById(R.id.needToPayTv);
 
 
-        expenseList = new ArrayList<>();
-        expenseAA = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, expenseList);
-        toPayLv.setAdapter(expenseAA);
+        //expenseList = new ArrayList<>();
+        toPayAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1);
+        toPayLv.setAdapter(toPayAdapter);
+        
+        amountOwedAdapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1);
+        owedLv.setAdapter(amountOwedAdapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -205,17 +208,23 @@ public class MoneyFragment extends Fragment {
         expenseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-                expenseList.clear();
-                totalEx = 0.0;
+                toPayAdapter.clear();
+                amountOwedAdapter.clear();
+                
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     eItem expenseItem = snapshot.getValue(eItem.class);
                     if (expenseItem != null){
-                        expenseList.add(expenseItem);
-                        totalEx += expenseItem.getAmount();
+                        if(expenseItem.getUserId().equals(currentUser.getUid())){
+                            amountOwedAdapter.add(expenseItem);
+                            updateOwedAmount();
+                        } else {
+                            toPayAdapter.add(expenseItem);
+                            updateToPay();
+                        }
+                        
                     }
                 }
-                expenseAA.notifyDataSetChanged();
-                updateOwedAmount();
+                
             }
 
             @Override
@@ -225,6 +234,9 @@ public class MoneyFragment extends Fragment {
         });
 
 
+    }
+
+    private void updateToPay() {
     }
 
     private void updateOwedAmount() {
