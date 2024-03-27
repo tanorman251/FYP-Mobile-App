@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".AdviceFragment">
 
+
     <!-- TODO: Update blank fragment layout -->
     <TextView
 
@@ -28,19 +29,25 @@
     <ListView
     android:id="@+id/adviceList"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_height="500dp"
     android:layout_below="@+id/filterAdvice"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_alignParentBottom="false"/>
+android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:layout_alignParentBottom="false"
+    />
 
     <Button
-    android:id="@+id/chatbotBtn"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Press Here to Ask somthing else"
-    android:layout_centerHorizontal="true"
-    android:layout_below="@+id/adviceList"
-    android:layout_marginBottom="70dp"/>
+            android:id="@+id/chatbotBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Press Here to Ask somthing else"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/adviceList"
+android:layout_marginBottom="70dp"
+            android:layout_marginTop="5dp"
+    android:backgroundTint="@color/purpureous"
+    android:textColor="@color/white"/>
+
+
 
 </RelativeLayout>

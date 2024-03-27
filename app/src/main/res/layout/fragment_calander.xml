@@ -38,7 +38,8 @@
         app:layout_constraintStart_toStartOf="parent"
         android:backgroundTint="@color/purpureous"
         app:layout_constraintTop_toBottomOf="@+id/etEvent"
-        android:onClick="buttonAddEvent"/>
+        android:onClick="buttonAddEvent"
+    android:textColor="@color/white"/>
 
     <ListView
             android:id="@+id/eventListView"
@@ -49,7 +50,8 @@
             android:layout_marginBottom="70dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:stackFromBottom="true" tools:ignore="NestedScrolling"/>
+            android:stackFromBottom="false"
+            tools:ignore="NestedScrolling"/>
 
 
 

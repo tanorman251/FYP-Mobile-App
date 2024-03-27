@@ -68,6 +68,7 @@
     android:layout_margin="20sp"
     android:layout_below="@+id/feedbackEt"
     android:text="SEND FEEDBACK"
-    android:backgroundTint="@color/purpureous"/>
+    android:backgroundTint="@color/purpureous"
+    android:textColor="@color/white"/>
 
 </RelativeLayout>

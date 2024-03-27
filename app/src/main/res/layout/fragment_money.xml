@@ -19,23 +19,20 @@
     android:id="@+id/costNameEt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:hint="Item Name"/>
+    android:hint="Expense Name"/>
 
     <EditText
             android:id="@+id/costAmountEt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Item Amount (£)"/>
+            android:hint="Expense Amount (£)"/>
 
-    <EditText
-            android:id="@+id/costDescEt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Description"/>
+
 
        <Button
        android:id="@+id/addExpenseBtn"
        android:layout_width="match_parent"
+       android:textColor="@color/white"
        android:layout_height="wrap_content"
        android:text="Add Expense"
        android:layout_margin="5dp"
@@ -44,23 +41,31 @@
        />
 
    </LinearLayout>
+    <TextView
+            android:id="@+id/needToPayTv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You need to pay: £0.00"/>
 
     <ListView
-            android:id="@+id/expensesLv"
+            android:id="@+id/needToPayLv"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
     <TextView
-    android:id="@+id/needToPayTv"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="You need to pay: £0.00"/>
-
-    <TextView
             android:id="@+id/usersIncomeTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Owed: £0.00"
-    android:layout_marginBottom="80dp"/>
+            android:text="You are Owed: £0.00"
+            />
+
+    <ListView
+            android:id="@+id/moneyOwedLv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+    android:layout_marginBottom="75dp"/>
+
+
 
 </LinearLayout>

@@ -4,14 +4,22 @@ public class eItem {
     private String itemName;
     private double amount;
 
-    private String desc;
+    private double amountPerPerson;
+
+
 
     private String userId;
     private String groupPin;
-    public eItem(String itemName, double amount, String desc, String userId, String usersGpin){
+
+    public eItem(){
+
+    }
+
+
+    public eItem(String itemName, double amount, double amountPerPerson, String userId, String groupPin){
         this.itemName = itemName;
         this.amount = amount;
-        this.desc = desc;
+        this.amountPerPerson = amountPerPerson;
         this.userId = userId;
         this.groupPin = groupPin;
     }
@@ -19,16 +27,56 @@ public class eItem {
     public String getItemName(){
         return itemName;
     }
+
+
     public double getAmount(){
         return amount;
     }
-    public String getDesc(){
-        return desc;
+
+    public double getAmountPerPerson(){
+        return amount;
     }
 
     public  String getGroupPin() {
         return groupPin;
     }
 
+    public  String getUserId() {
+        return userId;
+    }
+
+    public  void  setItemName(String itemName){
+        this.itemName = itemName;
+    }
+
+    public  void  setAmount(double amount){
+        this.amount = amount;
+    }
+
+    public  void  setAmountPerPerson(double amountPerPerson){
+        this.amountPerPerson = amountPerPerson;
+    }
+
+    public  void  setGroupPin(String groupPin){
+        this.groupPin = groupPin;
+    }
+
+    public  void  setUserId(String userId){
+        this.userId = userId;
+    }
+
+
+    public String toString(){
+        return "eItem{" + "itemName = " + itemName + '\'' +
+                ", amount = " + amount +
+                ", amountPerPerson = " + amountPerPerson +
+
+                ", userId = " + userId + '\'' +
+                ", groupPin = " + groupPin + '\'' +
+                '}';
+
+
+
+    }
 
 }

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-
+    android:layout_margin="10dp"
     android:padding="10dp"
     tools:ignore="ExtraText"
     android:background="@color/lavender">
@@ -23,7 +23,7 @@
         android:text="Wallet Share"
         android:textStyle="bold"
         android:textSize="40sp"
-        android:textColor="@color/richBlack"></TextView>>
+        android:textColor="@color/richBlack"></TextView>
 
         <Button
                 android:textColor="@color/white"
