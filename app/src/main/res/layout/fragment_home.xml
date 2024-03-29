@@ -35,15 +35,38 @@
     />
 
     <TextView
+            android:id="@+id/textViewGroupPin"
+            android:text="GROUP--PIN"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/titleHome"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true"
+            android:textColor="@color/black"
+            android:textSize="16sp" android:layout_marginTop="50dp" android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp" android:layout_marginBottom="5dp"/>
+
+    <Button
+    android:id="@+id/copyPinBtn"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_below="@+id/textViewGroupPin"
+    android:backgroundTint="@color/purpureous"
+    android:textColor="@color/white"
+    android:text="Click HERE TO COPY PIN"
+    android:layout_marginStart="30dp"
+    android:layout_marginEnd="30dp"/>
+
+    <TextView
             android:id="@+id/textViewFeedback"
             android:text="Please leave us some feedback below :)"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:layout_below="@+id/titleHome"
+            android:layout_below="@+id/textViewGroupPin"
             android:layout_centerHorizontal="true"
             android:textColor="@color/black"
-            android:textSize="15sp" android:layout_marginTop="50dp" android:layout_marginStart="50dp"
-            android:layout_marginEnd="50dp" android:layout_marginBottom="50dp"/>
+            android:textSize="16sp" android:layout_marginTop="100dp" android:layout_marginStart="50dp"
+            android:layout_marginEnd="50dp" android:layout_marginBottom="5dp"/>
 
     <RatingBar
     android:id="@+id/userRating"
@@ -51,15 +74,16 @@
     android:layout_width="wrap_content"
     android:layout_below="@+id/textViewFeedback"
     android:layout_centerHorizontal="true"
-    android:layout_marginTop="20dp"/>
+    android:layout_marginTop="5dp"/>
 
     <EditText
-    android:id="@+id/feedbackEt"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:layout_below="@+id/userRating"
-    android:padding="15sp"
-     android:layout_margin="20sp"   />
+            android:id="@+id/feedbackEt"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/userRating"
+            android:padding="15sp"
+            android:layout_marginTop="5dp" android:layout_marginStart="20sp" android:layout_marginEnd="20sp"
+            android:layout_marginBottom="5dp"/>
 
     <Button
     android:id="@+id/feedbackBtn"

@@ -244,10 +244,11 @@ public class MoneyFragment extends Fragment {
                     String pin = userSnapshot.child("pin").getValue(String.class);
                     if (pin != null && pin.equals(usersGpin)){
                         count++;
+                        groupMembersCount++;
 
                     }
                 }
-                groupMembersCount = count;
+                //groupMembersCount = count;
                 Toast.makeText(getContext(), String.valueOf(count), Toast.LENGTH_LONG).show();
 
 
@@ -287,7 +288,7 @@ public class MoneyFragment extends Fragment {
                             updateOwedAmount();
                         } else {
                             //TODO change 4 to change depending on the amount of users in a group
-                            double amountPerPerson = expenseItem.getAmount() / groupMembersCount;
+                            double amountPerPerson = expenseItem.getAmount() / 4;//groupMembersCount;
                             expenseItem.setAmount(amountPerPerson);
                             toPayAdapter.add(expenseItem);
                             updateToPay();

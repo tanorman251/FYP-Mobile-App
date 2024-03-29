@@ -131,7 +131,7 @@ public class MessageFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     String currentUserPin =snapshot.getValue(String.class);
-                    groupName.setText("Group Pin: "+ currentUserPin);
+                    groupName.setText("Group " + currentUserPin + " Chat");
                 }
 
                 @Override

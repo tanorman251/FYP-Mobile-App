@@ -1,18 +1,26 @@
 package com.example.fyptommynorman;
 
+import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.widget.*;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.*;
+import com.google.firebase.firestore.FirebaseFirestore;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,12 +40,22 @@ public class HomeFragment extends Fragment {
 
     private ImageButton profileBtn, settingsBtn;
 
-    private Button feedbackBtn;
+    private Button feedbackBtn, copyPinBtn;
     private RatingBar ratingBar;
 
     private EditText feedbackEt;
 
-    private DatabaseReference databaseReference;
+    private TextView groupPinTv;
+
+    private String groupPin;
+
+    private FirebaseAuth authUser;
+    private FirebaseFirestore firebaseFirestore;
+    private FirebaseDatabase db;
+
+    private FirebaseUser currentUser;
+
+    private DatabaseReference databaseReference, pinRef;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -70,12 +88,14 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // Inflate the layout for this fragment
+        copyPinBtn = view.findViewById(R.id.copyPinBtn);
 
         settingsBtn = view.findViewById(R.id.settingsBtn);
 
@@ -86,6 +106,13 @@ public class HomeFragment extends Fragment {
         feedbackBtn = view.findViewById(R.id.feedbackBtn);
 
         feedbackEt = view.findViewById(R.id.feedbackEt);
+
+        groupPinTv = view.findViewById(R.id.textViewGroupPin);
+
+        authUser = FirebaseAuth.getInstance();
+        currentUser = authUser.getCurrentUser();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        db = FirebaseDatabase.getInstance();
 
         feedbackBtn.setOnClickListener(v -> submitFeedback());
 
@@ -104,8 +131,61 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        if (currentUser != null){
+            String currentUid = currentUser.getUid();
+            DatabaseReference pinRef = db.getReference("User").child(currentUid).child("pin");
+            pinRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                    groupPin = dataSnapshot.getValue(String.class);
+                    groupPinTv.setText("Your group pin is " + groupPin + " share this with your housemates when they sign up");
+                }
+
+                @Override
+                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+
+                }
+            });
+            copyPinBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    copyGroupPin(groupPin);
+                }
+            });
+
+
+//            DatabaseReference pin = db.getReference("User").child(currentUid).child("pin");
+//
+//            databaseReference = pin;
+//            databaseReference.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+//                    String currentUserPin = dataSnapshot.getValue(String)
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+//
+//                }
+//            });
+        }
+
+
+
+
         return view;
     }
+
+    private void copyGroupPin(String groupPin) {
+
+        ClipboardManager clipboardManager = (ClipboardManager) requireActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText("Pin:", groupPin);
+        if(clipboardManager != null ){
+            clipboardManager.setPrimaryClip(clipData);
+            Toast.makeText(requireContext(), "Pin copied to clipboard", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void submitFeedback() {
 
         //TODO IF I CANT WORK OUT EMAIL, JUST SEND TO Firebase which ive done

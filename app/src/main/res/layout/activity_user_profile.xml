@@ -8,14 +8,56 @@
         tools:context=".UserProfileActivity"
 android:background="@color/lavender">
 
+<ImageView
+android:id="@+id/profileImage"
+android:layout_width="150dp"
+android:layout_height="150dp"
+android:layout_marginTop="20dp"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent"
+app:layout_constraintTop_toTopOf="parent"
+android:src="@drawable/baseline_person_24"/>
+
+ <TextView
+ android:id="@+id/nameTv"
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:layout_marginTop="20dp"
+ android:text=""
+ android:textSize="20sp"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintTop_toBottomOf="@+id/profileImage"
+ android:textColor="@color/richBlack"/>
+
+
     <TextView
-            android:id="@+id/title"
+            android:id="@+id/emailTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profile"
-            android:textSize="24sp"
-            android:textColor="@color/black"
-            android:gravity="center_horizontal"/>
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameTv"
+            android:textColor="@color/richBlack"/>
+
+
+    <TextView
+            android:textColor="@color/richBlack"
+            android:id="@+id/groupTv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text=""
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailTv"/>
+
+
+
 
     <Button
     android:id="@+id/logoutBtn"
