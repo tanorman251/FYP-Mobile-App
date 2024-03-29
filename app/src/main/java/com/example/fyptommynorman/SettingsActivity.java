@@ -14,6 +14,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
 
 
         Button homeBtn = findViewById(R.id.backBtn);
@@ -27,7 +29,6 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+
     }
 }

@@ -1,5 +1,7 @@
 package com.example.fyptommynorman;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -10,6 +12,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -46,10 +50,14 @@ public class MoneyFragment extends Fragment {
     private ArrayAdapter<eItem> toPayAdapter, amountOwedAdapter;
 
     private DatabaseReference moneyDb;
+
+    private TextView amountOwedTv, toPayTv;
     
     private double totalEx = 0.0;
     private double toPay = 0;
     private double amountOwed = 0;
+
+    private int groupMembersCount;
 
     private String usersGpin;
 
@@ -102,8 +110,9 @@ public class MoneyFragment extends Fragment {
         addExpenseBtn = view.findViewById(R.id.addExpenseBtn);
         toPayLv = view.findViewById(R.id.needToPayLv);
         owedLv = view.findViewById(R.id.moneyOwedLv);
-        userIncomeTv = view.findViewById(R.id.usersIncomeTv);
-        userOwedTv = view.findViewById(R.id.needToPayTv);
+
+        amountOwedTv = view.findViewById(R.id.usersIncomeTv);
+        toPayTv = view.findViewById(R.id.needToPayTv);
 
 
         //expenseList = new ArrayList<>();
@@ -115,6 +124,8 @@ public class MoneyFragment extends Fragment {
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
 
 
         if (currentUser != null){
@@ -135,6 +146,51 @@ public class MoneyFragment extends Fragment {
                 }
             });
         }
+//        groupMembersCount = countGroupMembers(usersGpin);
+        owedLv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                eItem selectedExpense = (eItem) parent.getItemAtPosition(position);
+                AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+                builder.setTitle("Confirm?").setMessage("Have you been paid for this and want to delete this item?").setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                DatabaseReference billsRef = databaseReference.child("Expenses");
+                                billsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren() ){
+                                            dataSnapshot1.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+                                                        Toast.makeText(getContext(), "Item successfully deleted", Toast.LENGTH_SHORT).show();
+
+                                                    }
+                                                }).addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull @NotNull Exception e) {
+                                                        Toast.makeText(getContext(), "Failed to delete item", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                                break;
+                                            }
+                                        }
+
+                                    @Override
+                                    public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
+                                    }
+                                });
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
+
+
+                return true;
+            }
+        });
 
         addExpenseBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +209,7 @@ public class MoneyFragment extends Fragment {
         String amount = costEt.getText().toString().trim();
 
         if (item.isEmpty() || amount.isEmpty()){
-            Toast.makeText(getContext(), "PLease dont leave blank", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "PLease don't leave this blank", Toast.LENGTH_LONG).show();
             return;
         }
         double cost = Double.parseDouble(amount);
@@ -188,10 +244,16 @@ public class MoneyFragment extends Fragment {
                     String pin = userSnapshot.child("pin").getValue(String.class);
                     if (pin != null && pin.equals(usersGpin)){
                         count++;
+
                     }
                 }
-                updateOwedAmount();
+                groupMembersCount = count;
+                Toast.makeText(getContext(), String.valueOf(count), Toast.LENGTH_LONG).show();
+
+
+                //updateOwedAmount();
             }
+
 
             @Override
             public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
@@ -202,6 +264,10 @@ public class MoneyFragment extends Fragment {
         //TODO add logic to divide group
     }
 
+    interface CountListener{
+        void onCountReceived(int count);
+    }
+
     private void loadExpenses() {
 
         DatabaseReference expenseRef = databaseReference.child("Expenses");
@@ -210,6 +276,8 @@ public class MoneyFragment extends Fragment {
             public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
                 toPayAdapter.clear();
                 amountOwedAdapter.clear();
+
+                //countGroupMembers(usersGpin);
                 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     eItem expenseItem = snapshot.getValue(eItem.class);
@@ -218,13 +286,16 @@ public class MoneyFragment extends Fragment {
                             amountOwedAdapter.add(expenseItem);
                             updateOwedAmount();
                         } else {
+                            //TODO change 4 to change depending on the amount of users in a group
+                            double amountPerPerson = expenseItem.getAmount() / groupMembersCount;
+                            expenseItem.setAmount(amountPerPerson);
                             toPayAdapter.add(expenseItem);
                             updateToPay();
                         }
                         
                     }
                 }
-                
+
             }
 
             @Override
@@ -237,217 +308,11 @@ public class MoneyFragment extends Fragment {
     }
 
     private void updateToPay() {
+        toPayTv.setText("You need to Pay:");
     }
 
     private void updateOwedAmount() {
-        double amountPaid = totalEx - (totalEx / countGroupMembers(usersGpin));
-        userOwedTv.setText(String.format("you need to pay: £%.2f", amountPaid));
+//        double amountPaid = totalEx - (totalEx / countGroupMembers(usersGpin));
+        amountOwedTv.setText(String.format("You are Owed:"));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        //refreshUi();
-//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if (currentUser != null){
-//            String userId = currentUser.getUid();
-//            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("User").child(userId);
-//            //getGroupPin(currentUser);
-//        getGroupPin();
-//            userRef.child("pin").addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-//
-//                    if (dataSnapshot.exists()){
-//                        usersGpin = dataSnapshot.child("pin").getValue(String.class);
-//                        refreshUi();
-//                    }
-//                  //  usersGpin = dataSnapshot.getValue(String.class);
-//                    //if(currentUser != null && currentUser.getGroupPin() != null && currentUser){
-//                        refreshUi();
-//               //     }
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
-//        // Inflate the layout for this fragment
-//
-//
-//        nameEt = view.findViewById(R.id.costNameEt);
-//        costEt = view.findViewById(R.id.costAmountEt);
-//        descEt = view.findViewById(R.id.costDescEt);
-//        addExpenseBtn = view.findViewById(R.id.addExpenseBtn);
-//        expenseLv = view.findViewById(R.id.expensesLv);
-//        userIncomeTv = view.findViewById(R.id.usersIncomeTv);
-//        userOwedTv = view.findViewById(R.id.needToPayTv);
-//
-//       // refreshUi();
-//
-//        expenseList = new ArrayList<>();
-//        moneyDb = FirebaseDatabase.getInstance().getReference().child("Expenses");
-//
-//        expenseAA = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, expenseList);
-//        expenseLv.setAdapter(expenseAA);
-//        refreshUi();
-//
-//    moneyDb.addValueEventListener(new ValueEventListener() {
-//        @Override
-//        public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-//            expenseAA.clear();
-//            refreshUi();
-//            for (DataSnapshot snapshot : dataSnapshot.getChildren()){
-//                eItem expense = snapshot.getValue(eItem.class);
-//                if(expense != null && usersGpin!= null && expense.getGroupPin() != null && expense.getGroupPin().equals(usersGpin)){
-//                    expenseAA.add(expense);
-//                }
-//            }
-//            expenseAA.notifyDataSetChanged();
-//            refreshUi();
-//        }
-//
-//        @Override
-//        public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-//
-//        }
-//    });
-//   // getGroupPin();
-//   // refreshUi();
-//    addExpenseBtn.setOnClickListener(new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            addExpense();
-//        }
-//    });
-//        return view;
-//    }
-//
-//    private void getGroupPin() {
-//        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-//        if (currentUser != null){
-//            String uid = currentUser.getUid();
-//            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("User").child(uid);
-//            userRef.child("pin").addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-//                    usersGpin = dataSnapshot.getValue(String.class);
-//                    refreshUi();
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
-//    }
-//
-//    private void refreshUi() {
-//        if (expenseList == null){
-//            expenseList = new ArrayList<>();
-//        }
-//
-//        amountOwed = calculateAmountUsersOwed();
-//
-//        toPay = calculateAmountToPay(expenseList);
-//
-//        userOwedTv.setText("You Are Owed: £" + String.format("%.2f", amountOwed));
-//
-//        //toPay = totalEx / expenseList.size();
-//
-//        userIncomeTv.setText("You need to pay: £" + String.format("%.2f", toPay));
-//
-//        //only show same group
-//
-//        List<eItem> filteredByGroup = new ArrayList<>();
-//        for (eItem item : expenseList){
-//            if (item.getGroupPin() != null && usersGpin != null && item.getGroupPin().equals(usersGpin)){
-//                Log.d("TAG", "refreshUi: " + item.getGroupPin() );
-//                Log.d("TAG", "refreshUi: " + usersGpin );
-//
-//                filteredByGroup.add(item);
-//            }
-//        }
-//        expenseAA.clear();
-//        expenseAA.addAll(filteredByGroup);
-//        expenseAA.notifyDataSetChanged();;
-//    }
-//
-//    private double calculateAmountToPay(List<eItem> expenseList) {
-//        double totalToPay = 0.0;
-//        int groupMembers = 0;
-//        for (eItem expense : expenseList){
-//            if(expense != null && expense.getGroupPin() != null && expense.getGroupPin().equals(usersGpin)&& usersGpin != null){
-//                totalToPay += expense.getAmount();
-//                groupMembers = 1;
-//
-//            }
-//        }
-//        if(groupMembers > 0){
-//            return  totalToPay / groupMembers;
-//        } else {
-//            return 0.0;
-//        }
-//    }
-//
-//    private double calculateAmountUsersOwed() {
-//        double amountPaid = 0.0;
-//        if(expenseList != null){
-//        for (eItem item : expenseList){
-//            if(item.getGroupPin() != null && item.getGroupPin().equals(usersGpin)) {
-//
-//                amountPaid += item.getAmount();
-//            }
-//        }}
-//        return amountPaid - toPay;
-//        }
-//
-//
-//    private void addExpense() {
-//
-//        String userId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-//
-//        String itemName = nameEt.getText().toString();
-//        double amount = Double.parseDouble(String.valueOf(Double.parseDouble((costEt.getText().toString()))));
-//        String desc = descEt.getText().toString();
-//
-//        eItem expenseItem = new eItem(itemName, amount, desc, userId, usersGpin);
-//
-//        if (usersGpin != null && usersGpin.equals(expenseItem.getGroupPin())) {
-//
-//
-//            expenseList.add(expenseItem);
-//            expenseAA.notifyDataSetChanged();
-//
-//        }
-//        totalEx += amount;
-//        refreshUi();
-//
-//        DatabaseReference newExpenseRef = moneyDb.push();
-//        newExpenseRef.setValue(expenseItem);
-//
-//    }
-//}

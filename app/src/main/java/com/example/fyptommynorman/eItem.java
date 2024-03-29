@@ -24,6 +24,8 @@ public class eItem {
         this.groupPin = groupPin;
     }
 
+    //getter methods
+
     public String getItemName(){
         return itemName;
     }
@@ -44,6 +46,8 @@ public class eItem {
     public  String getUserId() {
         return userId;
     }
+
+    //setter methods
 
     public  void  setItemName(String itemName){
         this.itemName = itemName;
@@ -67,13 +71,15 @@ public class eItem {
 
 
     public String toString(){
-        return "eItem{" + "itemName = " + itemName + '\'' +
-                ", amount = " + amount +
-                ", amountPerPerson = " + amountPerPerson +
 
-                ", userId = " + userId + '\'' +
-                ", groupPin = " + groupPin + '\'' +
-                '}';
+        return "£" + amount + " for " + itemName;
+//        return "eItem{" + "itemName = " + itemName + '\'' +
+//                ", amount = " + amount +
+//                ", amountPerPerson = " + amountPerPerson +
+//
+//                ", userId = " + userId + '\'' +
+//                ", groupPin = " + groupPin + '\'' +
+//                '}' ;
 
 
 

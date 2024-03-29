@@ -45,7 +45,10 @@
             android:id="@+id/needToPayTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="You need to pay: £0.00"/>
+            android:text="You need to pay: £0.00"
+            android:textColor="@color/richBlack"
+            android:textSize="18sp"
+            android:layout_marginStart="10dp"/>
 
     <ListView
             android:id="@+id/needToPayLv"
@@ -57,7 +60,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="You are Owed: £0.00"
-            />
+            android:textColor="@color/richBlack"
+    android:textSize="18sp"
+    android:layout_marginStart="10dp"/>
 
     <ListView
             android:id="@+id/moneyOwedLv"
