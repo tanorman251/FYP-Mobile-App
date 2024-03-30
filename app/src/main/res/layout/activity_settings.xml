@@ -9,11 +9,104 @@
 android:background="@color/lavender">
 
     <TextView
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="20dp"
+            android:padding="20dp"
+            android:textColor="@color/richBlack"
+            android:textSize="18sp"
             android:id="@+id/settingsTitle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:text="Settings"
     android:gravity="center_horizontal"/>
+
+    <TextView
+    android:id="@+id/ldtv"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:text="Toggle light/dark mode"
+    app:layout_constraintTop_toBottomOf="@+id/settingsTitle"
+    android:textColor="@color/richBlack"
+    android:layout_margin="15dp"
+    android:padding="15dp"
+    android:gravity="center_horizontal"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Switch
+    android:id="@+id/themeToggle"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/ldtv"/>
+
+
+    <TextView
+            android:id="@+id/nottificationTv"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Toggle Nottifications"
+            app:layout_constraintTop_toBottomOf="@+id/themeToggle"
+            android:textColor="@color/richBlack"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <Switch
+            android:id="@+id/nottificationToggle"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nottificationTv"/>
+
+
+    <TextView
+            android:id="@+id/faqTv"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+
+            android:text="Frequently asked questions"
+            app:layout_constraintTop_toBottomOf="@+id/nottificationToggle"
+            android:textColor="@color/richBlack"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    <ListView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/faqLv"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/faqTv"
+    app:layout_constraintBottom_toTopOf="@+id/contactEmailTv"
+    />
+
+
+    <TextView
+            android:id="@+id/contactEmailTv"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Contact us at: support@walletShare.com"
+            app:layout_constraintTop_toBottomOf="@+id/faqLv"
+            android:textColor="@color/richBlack"
+            android:layout_margin="15dp"
+            android:padding="15dp"
+            android:gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginBottom="40dp"/>
+
+
+
+
 
     <Button
             android:id="@+id/backBtn"

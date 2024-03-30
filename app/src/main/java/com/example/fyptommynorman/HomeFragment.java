@@ -54,9 +54,7 @@ public class HomeFragment extends Fragment {
     private FirebaseDatabase db;
 
     private FirebaseUser currentUser;
-
     private DatabaseReference databaseReference, pinRef;
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -78,7 +76,6 @@ public class HomeFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +84,6 @@ public class HomeFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,7 +111,6 @@ public class HomeFragment extends Fragment {
         db = FirebaseDatabase.getInstance();
 
         feedbackBtn.setOnClickListener(v -> submitFeedback());
-
         settingsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,26 +148,7 @@ public class HomeFragment extends Fragment {
                 }
             });
 
-
-//            DatabaseReference pin = db.getReference("User").child(currentUid).child("pin");
-//
-//            databaseReference = pin;
-//            databaseReference.addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull @NotNull DataSnapshot dataSnapshot) {
-//                    String currentUserPin = dataSnapshot.getValue(String)
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull @NotNull DatabaseError databaseError) {
-//
-//                }
-//            });
         }
-
-
-
-
         return view;
     }
 
@@ -200,37 +176,6 @@ public class HomeFragment extends Fragment {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("User-Feedback");
         databaseReference.push().setValue("Star Rating: " + starRating + "\n\nUser Feedback: " + feedback);
         feedbackEt.getText().clear();
-
-
-
-
-//         send feedback to the email not working
-//        //EMAIL PASSWORD = SwF12345!  EMAIL = walletShareFeedback@outlook.com
-//        String emailSubject = "User Feedback";
-//        String emailReview = "Star Rating: " + starRating + " User Feedback: " + feedback;
-//        String email = "walletShareFeedback@outlook.com";
-//
-//        Intent sendEmail = new Intent(Intent.ACTION_SENDTO);
-//        sendEmail.setData(Uri.parse("mailto:" + email));
-//
-//        sendEmail.putExtra(Intent.EXTRA_SUBJECT, emailSubject);
-//        sendEmail.putExtra(Intent.EXTRA_TEXT, emailReview);
-//
-//        PackageManager packageManager = requireContext().getPackageManager();
-//
-//        if(sendEmail.resolveActivity(packageManager) != null){
-//            startActivity(sendEmail);
-//
-//            Toast.makeText(getContext(), "Feedback Successfully Retrieved", Toast.LENGTH_LONG).show();
-//            feedbackEt.getText().clear();
-//        } else {
-//            Toast.makeText(getContext(), "Server is currently down please try again later", Toast.LENGTH_LONG).show();
-//            feedbackEt.getText().clear();
-//        }
-
-
-
-
 
     }
 }

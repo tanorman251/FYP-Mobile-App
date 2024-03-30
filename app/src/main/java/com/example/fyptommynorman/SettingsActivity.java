@@ -28,6 +28,14 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+//        things to add
+//                FAQ or tutorial
+//                light/darkmode
+//                        nottifications
+//                                change password /email
+//                maybe link to email???? for questions
+
+
 
 
     }
